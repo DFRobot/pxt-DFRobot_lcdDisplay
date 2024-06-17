@@ -1,46 +1,49 @@
 
 const enum LCDWidgetCategoryOne {
-    //% block="1-Slider"
+    //% block="Slider(01)"
     Slider = 1,
-    //% block="2-Bar"
+    //% block="Bar(02)"
     Bar = 2,
-    //% block="3-Compass"
+    //% block="Compass(03)"
     Compass = 3,
-    //% block="4-Gauge"
+    //% block="Gauge(04)"
     Gauge = 4,
-    //% block="5-LineMeter"
+    //% block="LineMeter(05)"
     LineMeter = 5,
 }
 
 const enum LCDWidgetCategoryTwo {
-    //% block="1-Slider"
+    //% block="Slider(01)"
     Slider = 1,
-    //% block="2-Bar"
+    //% block="Bar(02)"
     Bar = 2,
-    //% block="3-Compass"
+    //% block="Compass(03)"
     Compass = 3,
-    //% block="4-Gauge"
+    //% block="Gauge(04)"
     Gauge = 4,
-    //% block="5-LineMeter"
+    //% block="LineMeter(05)"
     LineMeter = 5,
-    //% block="6-Text"
-    Text = 6,
-    //% block="7-Line"
-    Line = 7,
-    //% block="8-Rectangle"
-    Rectangle = 8,
-    //% block="9-Circle"
-    Circle = 9,
-    //% block="10-Triangle"
-    Triangle = 10,
-    //% block="11-Icon"
-    Icon = 11,
-    //% block="12-Picture"
-    Picture = 12,
+    //% block="LineMeter(06)"
+    Chart = 6,
+    //% block="Text(07)"
+    Text = 7,
+    //% block="Line(08)"
+    Line = 8,
+    //% block="Rectangle(09)"
+    Rectangle = 9,
+    //% block="Circle(10)"
+    Circle = 10,
+    //% block="Triangle(11)"
+    Triangle = 11,
+    //% block="Icon(12)"
+    Icon = 12,
+    //% block="Gif(13)"
+    Gif = 13,
 }
 
 //% block="lcdDisplay"
-//% weight=100 color=#0fbc11 icon="\uf0b2"
+//% weight=100 color=#5b3fe8 icon="\uf0b2"
+//% groups="['Basics', 'Graph', "Widget"]"
 namespace lcdDisplay {
 
     export enum FontSize {
@@ -59,11 +62,18 @@ namespace lcdDisplay {
 
     export enum ChartStyles {
         //% block="LineChart"
-        LineChart = 1,
+        LineChart = 3,
         //% block="BarChart"
         BarChart = 2,
         //% block="ShadingLineChart"
-        ShadingLineChart = 3,
+        ShadingLineChart = 1,
+    }
+
+    export enum DrawType {
+        //% block="fill"
+        Fill = 1,
+        //% block="not fill"
+        NotFill = 2,
     }
 
     export enum Protocol {
@@ -139,29 +149,29 @@ namespace lcdDisplay {
         id: number
         next: GenericNode
         constructor(id: number) {
-            this.id= id;
+            this.id = id;
             this.next = null;
         }
     }
-    
+
     class LinkedList {
         head: GenericNode
         size: number
         id: number
         constructor() {
-          this.head = null;
-          this.size = 0;
-          this.id = 1;
+            this.head = null;
+            this.size = 0;
+            this.id = 1;
         }
 
         // adds a node to the end of the linked list
         append() {
             const newNode = new GenericNode(this.id);
-            if(this.head == null) {
+            if (this.head == null) {
                 this.head = newNode;
             } else {
                 let current = this.head;
-                while(current.next != null) {
+                while (current.next != null) {
                     current = current.next;
                 }
                 current.next = newNode;
@@ -171,18 +181,18 @@ namespace lcdDisplay {
         }
         // insert a node at a specific location
         insert(index: number, id: number): boolean {
-            if(index < 0 || index > this.size) {
+            if (index < 0 || index > this.size) {
                 return false;
             }
             const newNode = new GenericNode(id);
-            if(index == 0) {
+            if (index == 0) {
                 newNode.next = this.head;
                 this.head = newNode;
             } else {
                 let current = this.head;
                 let previous = null;
                 let i = 0;
-                while(i < index) {
+                while (i < index) {
                     previous = current;
                     current = current.next;
                     i++;
@@ -191,20 +201,20 @@ namespace lcdDisplay {
                 previous.next = newNode;
             }
             this.size++;
-            return true;    
+            return true;
         }
         // removes a node at a specific location
         removeAt(index: number): boolean {
-            if(index < 0 || index >= this.size || this.head == null) {
+            if (index < 0 || index >= this.size || this.head == null) {
                 return false;
             }
             let current = this.head;
-            if(index == 0) {
+            if (index == 0) {
                 this.head = current.next;
             } else {
                 let previous = null;
                 let i = 0;
-                while(i < index) {
+                while (i < index) {
                     previous = current;
                     current = current.next;
                     i++;
@@ -217,15 +227,15 @@ namespace lcdDisplay {
 
         // example Remove a node with a specific id
         removeId(id: number): boolean {
-            if(this.head == null) {
+            if (this.head == null) {
                 return false;
             }
             let current = this.head;
-            if(current.id == id) {
+            if (current.id == id) {
                 this.head = current.next;
             } else {
                 let previous = null;
-                while(current.id != id) {
+                while (current.id != id) {
                     previous = current;
                     current = current.next;
                 }
@@ -253,15 +263,36 @@ namespace lcdDisplay {
         gifHead: LinkedList | null,
     }
 
-    let list: GenericList;
+    let list: GenericList = {
+        lineChartHead: null,
+        seriesHead: null,
+        compassHead: null,
+        textHead: null,
+        gaugeHead: null,
+        lineHead: null,
+        rectHead: null,
+        circleHead: null,
+        triangleHead: null,
+        lineMeterHead: null,
+        barHead: null,
+        sliderHead: null,
+        iconHead: null,
+        gifHead: null,
+    }
     let protocol: Protocol = Protocol.IIC;
-    
+    let chartID = 0;
+    let axisListX: string[] = [];
+    let axisListY: string[] = [];
+    let axisYData: number[] = [];
+    let seriesData: any = {};
+
     /**
      * ...
      */
 
     //% block="Color serial screen I2C initialization" 
     //% weight=100
+    //% group="Basics"
     export function lcdInitIIC() {
         creatList();
         protocol = Protocol.IIC;
@@ -273,6 +304,7 @@ namespace lcdDisplay {
 
     //% block="clear the screen" 
     //% weight=95
+    //% group="Basics"
     export function lcdClearAll() {
         cleanScreen();
     }
@@ -285,6 +317,7 @@ namespace lcdDisplay {
     //% block="set the background color %color"
     //% color.shadow="colorNumberPicker" 
     //% weight=90
+    //% group="Basics"
     export function lcdSetBgcolor(color: number) {
         setBackgroundColor(color);
     }
@@ -301,6 +334,7 @@ namespace lcdDisplay {
     //% green.min=0 green.max=255 green.defl=255
     //% blue.min=0 blue.max=255 blue.defl=255
     //% weight=85
+    //% group="Basics"
     export function lcdGetRgbColor(red: number, green: number, blue: number): number {
         return (red << 16) + (green << 8) + (blue);
     }
@@ -312,6 +346,7 @@ namespace lcdDisplay {
 
     //% block="Setting a background picture %picture"
     //% weight=80
+    //% group="Basics"
     export function lcdSetBgIamge(picture: string) {
         // setBackgroundImg(0, picture); // Internal storage of pictures
         setBackgroundImg(1, picture); // Usb flash drive to store pictures
@@ -327,14 +362,15 @@ namespace lcdDisplay {
      * @param color to color ,eg: 0xFF0000
      */
 
-    //% block="display text %text number %num position x: %x y: %y || size %size color %color"
+    //% block="display text %text number %num position x: %x y: %y size %size color %color"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% color.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=75
-    export function lcdDisplayText(text: string, num: number, x: number, y: number, size?: FontSize, color?: number) {
+    //% group="Basics"
+    export function lcdDisplayText(text: string, num: number, x: number, y: number, size: FontSize, color: number) {
         updateString(num, x, y, text, size, color);
     }
 
@@ -342,27 +378,41 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param hour to hour ,eg: 12
-     * @param min to min ,eg: 40
-     * @param sec to sec ,eg: 30
+     * @param time to time ,eg: "12:40:30"
      * @param x to x ,eg: 120
      * @param y to y ,eg: 120
      * @param size to size ,eg: FontSize.Large
      * @param color to color ,eg: 0xFF0000
      */
 
-    //% block="display time number %num hour %hour minutes %min second %sec position x: %x y: %y || size %size color %color"
-    //% hour.min=0 hour.max=23 hour.defl=12
-    //% min.min=0 min.max=59 min.defl=40
-    //% sec.min=0 sec.max=59 sec.defl=30
+    //% block="display time number %num time %time position x: %x y: %y size %size color %color"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% color.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=70
-    export function lcdDisplayTime(num: number, hour: number, min: number, sec: number, x: number, y: number, size?: FontSize, color?: number) {
-        updateLcdTime(num, x, y, hour, min, sec, size, color);
+    //% group="Basics"
+    export function lcdDisplayTime(num: number, time: string, x: number, y: number, size: FontSize, color: number) {
+        updateString(num, x, y, time, size, color);
+    }
+
+    /**
+     * ...
+     * @param hour to hour ,eg: 12
+     * @param min to min ,eg: 40
+     * @param sec to sec ,eg: 30
+     */
+
+    //% block="hour %hour minutes %min second %sec "
+    //% hour.min=0 hour.max=23 hour.defl=12
+    //% min.min=0 min.max=59 min.defl=40
+    //% sec.min=0 sec.max=59 sec.defl=30
+    //% inlineInputMode=inline
+    //% weight=68
+    //% group="Basics"
+    export function lcdGetTime(hour: number, min: number, sec: number): string {
+        return `${hour < 10 ? "0" + hour : "" + hour}:${min < 10 ? "0" + min : "" + min}:${sec < 10 ? "0" + sec : "" + sec}`
     }
 
     /**
@@ -374,14 +424,15 @@ namespace lcdDisplay {
      * @param size to size ,eg: FontSize.Large
      */
 
-    //% block="display iamge number %num name %name position x: %x y: %y || size %size"
+    //% block="display iamge number %num name %name position x: %x y: %y size %size"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% size.min=0 size.max=512 size.defl=256
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=65
-    export function lcdDisplayIamge(num: number, name: string, x: number, y: number, size?: number) {
+    //% group="Basics"
+    export function lcdDisplayIamge(num: number, name: string, x: number, y: number, size: number) {
         updateIcon(num, x, y, name, size);
     }
 
@@ -393,10 +444,33 @@ namespace lcdDisplay {
      */
 
     //% block="rotate iamge number %num angle %angle"
+    //% num.min=1 num.max=255 num.defl=1
     //% angle.min=0 angle.max=360 size.defl=180
     //% weight=60
+    //% group="Basics"
     export function lcdRotateIamge(num: number, angle: number) {
-        setAngleIcon(num, angle);
+        setAngleIcon(num, angle * 10);
+    }
+
+    /**
+     * ...
+     * @param num to num ,eg: 1
+     * @param name to name ,eg: "Snowy.gif"
+     * @param x to x ,eg: 120
+     * @param y to y ,eg: 120
+     * @param size to size ,eg: FontSize.Large
+     */
+
+    //% block="display gif number %num name %name position x: %x y: %y size %size"
+    //% num.min=1 num.max=255 num.defl=1
+    //% x.min=0 x.max=320 x.defl=120
+    //% y.min=0 y.max=240 y.defl=120
+    //% size.min=0 size.max=512 size.defl=256
+    //% inlineInputMode=inline
+    //% weight=58
+    //% group="Basics"
+    export function lcdDisplayGif(num: number, name: string, x: number, y: number, size: number) {
+        updateGif(num, x, y, name, size);
     }
 
     /**
@@ -410,16 +484,18 @@ namespace lcdDisplay {
      * @param color to color ,eg: 0xFF0000
      */
 
-    //% block="draw line number %num start x1: %x1 y1: %y1 end x2: %x2 y2: %y2 || width %width color %color"
+    //% block="draw line number %num start x1: %x1 y1: %y1 end x2: %x2 y2: %y2 width %width color %color"
+    //% num.min=1 num.max=255 num.defl=1
     //% x1.min=0 x1.max=320 x1.defl=120
     //% y1.min=0 y1.max=240 y1.defl=120
     //% x2.min=0 x2.max=320 x2.defl=240
     //% y2.min=0 y2.max=240 y2.defl=240
     //% color.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=55
-    export function lcdDrawLine(num: number, x1: number, y1: number, x2: number, y2: number, width?: number, color?: number) {
+    //% group="Graph"
+    //% advanced=true
+    export function lcdDrawLine(num: number, x1: number, y1: number, x2: number, y2: number, width: number, color: number) {
         updateLine(num, x1, y1, x2, y2, width, color);
     }
 
@@ -432,23 +508,25 @@ namespace lcdDisplay {
      * @param h to h ,eg: 240
      * @param width to width ,eg: 5
      * @param bocolor to bocolor ,eg: 0xFF0000
+     * @param fill to fill ,eg: DrawType.Fill
      * @param fcolor to fcolor ,eg: 0xFF0000
      * @param round to round ,eg: RectangleRound.IsRound
      */
 
-    //% block="draw rectangle number %num start x: %x y: %y width %w height %h || line width %width Border color %bocolor fill color %fcolor round %round"
+    //% block="draw rectangle number %num start x: %x y: %y width %w height %h line width %width Border color %bocolor %fill color %fcolor round %round"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% w.min=0 w.max=320 w.defl=80
     //% h.min=0 h.max=240 h.defl=100
     //% bocolor.shadow="colorNumberPicker"
     //% fcolor.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=50
-    export function lcdDrawRectangle(num: number, x: number, y: number, w: number, h: number, width?: number, bocolor?: number, fcolor?: number, round?: RectangleRound) {
-        let fill = true;
-        updateRect(num, x, y, w, h, width, bocolor, fill ? 1 : 0, fcolor, round);
+    //% group="Graph"
+    //% advanced=true
+    export function lcdDrawRectangle(num: number, x: number, y: number, w: number, h: number, width: number, bocolor: number, fill: DrawType, fcolor: number, round: RectangleRound) {
+        updateRect(num, x, y, w, h, width, bocolor, fill === DrawType.Fill ? 1 : 0, fcolor, round === RectangleRound.IsRound ? 1 : 0);
     }
 
     /**
@@ -459,21 +537,23 @@ namespace lcdDisplay {
      * @param r to r ,eg: 10
      * @param width to width ,eg: 5
      * @param bocolor to bocolor ,eg: 0xFF0000
+     * @param fill to fill ,eg: DrawType.Fill
      * @param fcolor to fcolor ,eg: 0xFF0000
      */
 
-    //% block="draw Circle number %num center x: %x y: %y radius %r || line width %width Border color %bocolor fill color %fcolor"
+    //% block="draw Circle number %num center x: %x y: %y radius %r line width %width Border color %bocolor %fill color %fcolor"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% r.min=0 r.max=320 r.defl=10
     //% bocolor.shadow="colorNumberPicker"
     //% fcolor.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=45
-    export function lcdDrawCircle(num: number, x: number, y: number, r: number, width?: number, bocolor?: number, fcolor?: number) {
-        let fill = true;
-        updateCircle(num, x, y, r, width, bocolor, fill ? 1 : 0, fcolor);
+    //% group="Graph"
+    //% advanced=true
+    export function lcdDrawCircle(num: number, x: number, y: number, r: number, width: number, bocolor: number, fill: DrawType, fcolor: number) {
+        updateCircle(num, x, y, r, width, bocolor, fill === DrawType.Fill ? 1 : 0, fcolor);
     }
 
     /**
@@ -487,10 +567,12 @@ namespace lcdDisplay {
      * @param y3 to y3 ,eg: 200
      * @param width to width ,eg: 5
      * @param bocolor to bocolor ,eg: 0xFF0000
+     * @param fill to fill ,eg: DrawType.Fill
      * @param fcolor to fcolor ,eg: 0xFF0000
      */
 
-    //% block="draw triangle number %num x1: %x1 y1: %y1 x2: %x2 y2: %y2 x3: %x3 y3: %y3 || line width %width Border color %bocolor fill color %fcolor"
+    //% block="draw triangle number %num x1: %x1 y1: %y1 x2: %x2 y2: %y2 x3: %x3 y3: %y3 line width %width Border color %bocolor %fill color %fcolor"
+    //% num.min=1 num.max=255 num.defl=1
     //% x1.min=0 x1.max=320 x1.defl=10
     //% y1.min=0 y1.max=240 y1.defl=10
     //% x2.min=0 x2.max=320 x2.defl=120
@@ -499,12 +581,12 @@ namespace lcdDisplay {
     //% y3.min=0 y3.max=240 y3.defl=200
     //% bocolor.shadow="colorNumberPicker"
     //% fcolor.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=40
-    export function lcdDrawTriangle(num: number, x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, width?: number, bocolor?: number, fcolor?: number) {
-        let fill = true;
-        updateTriangle(num, x1, y1, x2, y2, x3, y3, width, bocolor, fill ? 1 : 0, fcolor);
+    //% group="Graph"
+    //% advanced=true
+    export function lcdDrawTriangle(num: number, x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, width: number, bocolor: number, fill: DrawType, fcolor: number) {
+        updateTriangle(num, x1, y1, x2, y2, x3, y3, width, bocolor, fill === DrawType.Fill ? 1 : 0, fcolor);
     }
 
     /**
@@ -517,16 +599,19 @@ namespace lcdDisplay {
      * @param color to color ,eg: 0xFF0000
      */
 
-    //% block="draw slider number %num position x: %x y: %y width %w height %h || color %color"
+    //% block="draw slider number %num position x: %x y: %y width %w height %h color %color"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% w.min=0 w.max=320 w.defl=120
     //% h.min=0 h.max=240 h.defl=120
     //% color.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
+    //% expandableArgumentMode="toggle"
     //% inlineInputMode=inline
     //% weight=35
-    export function lcdDrawSlider(num: number, x: number, y: number, w: number, h: number, color?: number) {
+    //% group="Widget"
+    //% advanced=true
+    export function lcdDrawSlider(num: number, x: number, y: number, w: number, h: number, color: number) {
         updateSlider(num, x, y, w, h, color);
     }
 
@@ -540,16 +625,19 @@ namespace lcdDisplay {
      * @param color to color ,eg: 0xFF0000
      */
 
-    //% block="draw bar number %num position x: %x y: %y width %w height %h || color %color"
+    //% block="draw bar number %num position x: %x y: %y width %w height %h color %color"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% w.min=0 w.max=320 w.defl=120
     //% h.min=0 h.max=240 h.defl=120
     //% color.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
+    //% expandableArgumentMode="toggle"
     //% inlineInputMode=inline
     //% weight=30
-    export function lcdDrawBar(num: number, x: number, y: number, w: number, h: number, color?: number) {
+    //% group="Widget"
+    //% advanced=true
+    export function lcdDrawBar(num: number, x: number, y: number, w: number, h: number, color: number) {
         updateBar(num, x, y, w, h, color);
     }
 
@@ -562,11 +650,14 @@ namespace lcdDisplay {
      */
 
     //% block="draw compass number %num position x: %x y: %y radius %r"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% r.min=0 r.max=320 r.defl=120
     //% inlineInputMode=inline
     //% weight=25
+    //% group="Widget"
+    //% advanced=true
     export function lcdDrawCompass(num: number, x: number, y: number, r: number) {
         updateCompass(num, x, y, r);
     }
@@ -583,7 +674,8 @@ namespace lcdDisplay {
      * @param dcolor to dcolor ,eg: 0xFF0000
      */
 
-    //% block="draw gauge number %num position x: %x y: %y radius %r start of scale %start End of scale %end || Pointer color %color Dial color %dcolor"
+    //% block="draw gauge number %num position x: %x y: %y radius %r start of scale %start End of scale %end Pointer color %color Dial color %dcolor"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% r.min=0 r.max=320 r.defl=120
@@ -591,10 +683,11 @@ namespace lcdDisplay {
     //% end.min=0 end.max=360 end.defl=240
     //% color.shadow="colorNumberPicker"
     //% dcolor.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=20
-    export function lcdDrawGauge(num: number, x: number, y: number, r: number, start: number, end: number, color?: number, dcolor?: number) {
+    //% group="Widget"
+    //% advanced=true
+    export function lcdDrawGauge(num: number, x: number, y: number, r: number, start: number, end: number, color: number, dcolor: number) {
         updateGauge(num, x, y, r, start, end, color, dcolor);
     }
 
@@ -610,7 +703,8 @@ namespace lcdDisplay {
      * @param dcolor to dcolor ,eg: 0xFF0000
      */
 
-    //% block="draw lineMeter number %num position x: %x y: %y radius %r start of scale %start End of scale %end || Pointer color %color Dial color %dcolor"
+    //% block="draw lineMeter number %num position x: %x y: %y radius %r start of scale %start End of scale %end Pointer color %color Dial color %dcolor"
+    //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
     //% r.min=0 r.max=320 r.defl=120
@@ -618,52 +712,12 @@ namespace lcdDisplay {
     //% end.min=0 end.max=360 end.defl=240
     //% color.shadow="colorNumberPicker"
     //% dcolor.shadow="colorNumberPicker"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode=inline
     //% weight=18
-    export function lcdDrawLineMeter(num: number, x: number, y: number, r: number, start: number, end: number, color?: number, dcolor?: number) {
+    //% group="Widget"
+    //% advanced=true
+    export function lcdDrawLineMeter(num: number, x: number, y: number, r: number, start: number, end: number, color: number, dcolor: number) {
         updateLineMeter(num, x, y, r, start, end, color, dcolor);
-    }
-
-    /**
-     * ...
-     * @param num to num ,eg: 1
-     * @param xaxis to xaxis ,eg: "Jan Feb Mar Apr May Jun"
-     * @param yaxis to yaxis ,eg: "20 40 60 80 100"
-     * @param styles to styles ,eg: ChartStyles.LineChart
-     */
-
-    //% block="draw chart number %num X-axis %xaxis Y-axis %yaxis styles %styles"
-    //% inlineInputMode=inline
-    //% weight=16
-    export function lcdDrawChart(num: number, xaxis: string, yaxis: string, styles: ChartStyles) {
-
-    }
-
-    /**
-     * ...
-     * @param num to num ,eg: 1
-     * @param color to color ,eg: 0xFF0000
-     */
-
-    //% block="adding chart data number %num color %color"
-    //% color.shadow="colorNumberPicker"
-    //% weight=14
-    export function lcdAddChartData(num: number, color: number) {
-
-    }
-
-    /**
-     * ...
-     * @param num to num ,eg: 1
-     * @param xaxis to xaxis ,eg: "Jan"
-     * @param data to data ,eg: 80
-     */
-
-    //% block="set chart data number %num X-axis %xaxis data %data"
-    //% weight=12
-    export function lcdSetChartData(num: number, xaxis: string, data: number) {
-
     }
 
     /**
@@ -674,9 +728,112 @@ namespace lcdDisplay {
      */
 
     //% block="%type=LCDWidgetCategoryOne_conv widget number %num data %data"
-    //% weight=10
+    //% num.min=1 num.max=255 num.defl=1
+    //% weight=17
+    //% group="Widget"
+    //% advanced=true
     export function lcdSetWidgetData(type: number, num: number, data: number) {
+        switch (type) {
+            case LCDWidgetCategoryOne.Slider:
+                setSliderValue(num, data);
+                break;
+            case LCDWidgetCategoryOne.Bar:
+                setBarValue(num, data);
+                break;
+            case LCDWidgetCategoryOne.Compass:
+                setCompassScale(num, data);
+                break;
+            case LCDWidgetCategoryOne.Gauge:
+                setGaugeValue(num, data);
+                break;
+            case LCDWidgetCategoryOne.LineMeter:
+                setMeterValue(num, data);
+                break;
+            default:
+                break;
+        }
+    }
 
+    /**
+     * ...
+     * @param num to num ,eg: 1
+     * @param xaxis to xaxis ,eg: "Jan Feb Mar Apr May Jun"
+     * @param yaxis to yaxis ,eg: "100 80 60 40 20 0"
+     * @param color to color ,eg: 0xFFFFFF
+     * @param styles to styles ,eg: ChartStyles.LineChart
+     */
+
+    //% block="draw chart number %num X-axis %xaxis Y-axis %yaxis background color %color styles %styles"
+    //% num.min=1 num.max=255 num.defl=1
+    //% color.shadow="colorNumberPicker"
+    //% inlineInputMode=inline
+    //% weight=16
+    //% group="Widget"
+    //% advanced=true
+    export function lcdDrawChart(num: number, xaxis: string, yaxis: string, color: number, styles: ChartStyles) {
+        chartID = num;
+        axisListX = xaxis.split(" ");
+        axisListY = yaxis.split(" ");
+        axisListX.forEach((value, index) => { axisYData.push(0) });
+        updateChart(chartID, color, styles);
+        basic.pause(100);
+        setChartAxisTexts(chartID, 0, axisListX);
+        basic.pause(100);
+        setChartAxisTexts(chartID, 1, axisListY);
+    }
+
+    /**
+     * ...
+     * @param num to num ,eg: 1
+     * @param color to color ,eg: 0xFF0000
+     */
+
+    //% block="adding chart data number %num color %color"
+    //% num.min=1 num.max=255 num.defl=1
+    //% color.shadow="colorNumberPicker"
+    //% weight=14
+    //% group="Widget"
+    //% advanced=true
+    export function lcdAddChartData(num: number, color: number) {
+        seriesData[num] = axisYData;
+        updateChartSeries(chartID, num, color);
+        addChartSeriesData(chartID, num, seriesData[num], axisListY.length)
+    }
+
+    /**
+     * ...
+     * @param num to num ,eg: 1
+     * @param xaxis to xaxis ,eg: "Feb"
+     * @param data to data ,eg: 80
+     */
+
+    //% block="set chart data number %num X-axis %xaxis data %data"
+    //% num.min=1 num.max=255 num.defl=1
+    //% weight=12
+    //% group="Widget"
+    //% advanced=true
+    export function lcdSetChartData(num: number, xaxis: string, data: number) {
+        let index = axisListX.indexOf(xaxis);
+        if (index !== -1) {
+            updateChartPoint(chartID, num, index, Math.round(data / 10));
+            // seriesData[num][index] = Math.round(data / 10);
+        }
+    }
+
+    /**
+     * ...
+     * @param num to num ,eg: 1
+     * @param color to color ,eg: 0xFFFFFF
+     * @param styles to styles ,eg: ChartStyles.LineChart
+     */
+
+    //% block="update chart number %num background color %color styles %styles"
+    //% color.shadow="colorNumberPicker"
+    //% weight=11
+    //% group="Widget"
+    //% advanced=true
+    export function lcdUpdateChart(num: number, color: number, styles: ChartStyles) {
+        updateChart(num, color, styles);
     }
 
     /**
@@ -686,9 +843,52 @@ namespace lcdDisplay {
      */
 
     //% block="delete %type=LCDWidgetCategoryTwo_conv widget number %num"
+    //% num.min=1 num.max=255 num.defl=1
     //% weight=8
+    //% group="Basics"
     export function lcdDeleteWidget(type: number, num: number) {
-
+        switch (type) {
+            case LCDWidgetCategoryTwo.Slider:
+                deleteSlider(num);
+                break;
+            case LCDWidgetCategoryTwo.Bar:
+                deleteBar(num);
+                break;
+            case LCDWidgetCategoryTwo.Compass:
+                deleteCompass(num);
+                break;
+            case LCDWidgetCategoryTwo.Gauge:
+                deleteGauge(num);
+                break;
+            case LCDWidgetCategoryTwo.LineMeter:
+                deleteLineMeter(num);
+                break;
+            case LCDWidgetCategoryTwo.Chart:
+                deleteChart(num);
+                break;
+            case LCDWidgetCategoryTwo.Text:
+                deleteString(num);
+                break;
+            case LCDWidgetCategoryTwo.Line:
+                deleteLine(num);
+                break;
+            case LCDWidgetCategoryTwo.Rectangle:
+                deleteRect(num);
+                break;
+            case LCDWidgetCategoryTwo.Circle:
+                deleteCircle(num);
+                break;
+            case LCDWidgetCategoryTwo.Triangle:
+                deleteTriangle(num);
+                break;
+            case LCDWidgetCategoryTwo.Icon:
+                deleteIcon(num);
+                break;
+            case LCDWidgetCategoryTwo.Gif:
+                deleteGif(num);
+            default:
+                break;
+        }
     }
 
     /**
@@ -792,17 +992,25 @@ namespace lcdDisplay {
 
     function drawGif(x: number, y: number, str: string, zoom: number): number {
         let len = str.length;
-        let cmd = creatCommand(CMD_OF_DRAW_GIF_INTERNAL, len + 11);
-        let id = getID(CMD_OF_DRAW_GIF_INTERNAL);
+        let cmd = creatCommand(CMD_OF_DRAW_GIF_EXTERNAL, len + 11);
+        let id = getID(CMD_OF_DRAW_GIF_EXTERNAL);
         cmd = cmd.concat([id]).concat(data16Tobyte(zoom)).concat(data16Tobyte(x)).concat(data16Tobyte(y));
         str.split("").forEach((value, index) => { cmd.push(value.charCodeAt(0)) });
         writeCommand(cmd, len + 11);
         return id;
     }
 
+    function updateGif(id: number, x: number, y: number, str: string, zoom: number) {
+        let len = str.length;
+        let cmd = creatCommand(CMD_OF_DRAW_GIF_EXTERNAL, len + 11);
+        cmd = cmd.concat([id]).concat(data16Tobyte(zoom)).concat(data16Tobyte(x)).concat(data16Tobyte(y));
+        str.split("").forEach((value, index) => { cmd.push(value.charCodeAt(0)) });
+        writeCommand(cmd, len + 11);
+    }
+
     function deleteGif(id: number) {
         let cmd = creatCommand(CMD_DELETE_OBJ, CMD_DELETE_OBJ_LEN);
-        cmd = cmd.concat([CMD_OF_DRAW_GIF_INTERNAL, id]);
+        cmd = cmd.concat([CMD_OF_DRAW_GIF_EXTERNAL, id]);
         writeCommand(cmd, CMD_DELETE_OBJ_LEN);
         deleteNodeByID(list.gifHead, id);
     }
@@ -876,7 +1084,7 @@ namespace lcdDisplay {
         cmd = cmd.concat([id, bw]).concat(data24Tobyte(boColor)).concat([fill]).concat(data24Tobyte(fillColor)).concat(data16Tobyte(x0)).concat(data16Tobyte(y0)).concat(data16Tobyte(x1)).concat(data16Tobyte(y1)).concat(data16Tobyte(x2)).concat(data16Tobyte(y2));
         writeCommand(cmd, CMD_OF_DRAW_TRIANGLE_LEN);
     }
-    
+
     function deleteTriangle(id: number) {
         let cmd = creatCommand(CMD_DELETE_OBJ, CMD_DELETE_OBJ_LEN);
         cmd = cmd.concat([CMD_OF_DRAW_TRIANGLE, id]);
@@ -1009,7 +1217,7 @@ namespace lcdDisplay {
         deleteNodeByID(list.lineMeterHead, id);
     }
 
-    function creatChart(strX: string, strY: string, bgColor: number, type: number): number {
+    function creatChart(strX: string[], strY: string[], bgColor: number, type: number): number {
         let cmd = creatCommand(CMD_OF_DRAW_LINE_CHART, CMD_DRAW_CHART_LEN);
         let id = getID(CMD_OF_DRAW_LINE_CHART);
         cmd = cmd.concat([id, type]).concat(data24Tobyte(bgColor));
@@ -1041,11 +1249,19 @@ namespace lcdDisplay {
         writeCommand(cmd, CMD_DRAW_SERIE_LEN);
     }
 
-    function setChartAxisTexts(chartId: number, axis: number, text: string) {
-        let len = text.length;
+    function setChartAxisTexts(chartId: number, axis: number, text: string[]) {
+        let len = text.length - 1;
+        text.forEach((value, index) => { len = len + value.length });
         let cmd = creatCommand(CMD_OF_DRAW_LINE_CHART_TEXT, len + 6);
         cmd = cmd.concat([chartId, axis]);
-        text.split("").forEach((value, index) => { cmd.push(value.charCodeAt(0)) });
+        for (let i = 0; i < text.length; i++) {
+            text[i].split("").forEach((value, index) => {
+                cmd.push(value.charCodeAt(0))
+            })
+            if (i != text.length - 1) {
+                cmd.push(0x0A); // "\n"
+            }
+        }
         writeCommand(cmd, len + 6);
     }
 
@@ -1056,10 +1272,10 @@ namespace lcdDisplay {
     }
 
     function addChartSeriesData(chartId: number, seriesId: number, point: number[], len: number): number {
-        let cmd = creatCommand(CMD_OF_DRAW_SERIE_DATA, len*2 + 8);
+        let cmd = creatCommand(CMD_OF_DRAW_SERIE_DATA, len * 2 + 8);
         cmd = cmd.concat([chartId, seriesId, 0, 0]);
-        point.forEach((value, index) => {  cmd = cmd.concat(data16Tobyte(value)) });
-        writeCommand(cmd, len*2 + 8);
+        point.forEach((value, index) => { cmd = cmd.concat(data16Tobyte(value)) });
+        writeCommand(cmd, len * 2 + 8);
         return 1;
     }
 
@@ -1100,7 +1316,7 @@ namespace lcdDisplay {
         list.iconHead = new LinkedList();
         list.gifHead = new LinkedList();
     }
-    
+
     function getID(type: number): number {
         let id = 0;
         switch (type) {
@@ -1162,11 +1378,11 @@ namespace lcdDisplay {
     }
 
     function data16Tobyte(data: number): number[] {
-        return [data >> 8, data & 0xFF];
+        return [(data >> 8) & 0xFF, data & 0xFF];
     }
 
     function data24Tobyte(data: number): number[] {
-        return [data >> 16, data >> 8, data & 0xFF];
+        return [(data >> 16) & 0xFF, (data >> 8) & 0xFF, data & 0xFF];
     }
 
     function creatCommand(cmd: number, len: number): number[] {
@@ -1174,15 +1390,16 @@ namespace lcdDisplay {
     }
 
     function writeCommand(data: number[], len: number) {
+        serial.writeNumbers(data);
         if (protocol == Protocol.IIC) {
             let remain = len;
             let i = 0;
             while (remain > 0) {
                 let currentTransferSize = (remain > IIC_MAX_TRANSFER_SIZE) ? 32 : remain;
                 if (remain > IIC_MAX_TRANSFER_SIZE) {
-                    pins.i2cWriteBuffer(address, pins.createBufferFromArray(data.slice(i * IIC_MAX_TRANSFER_SIZE, i * IIC_MAX_TRANSFER_SIZE + currentTransferSize)), false);
-                } else {
                     pins.i2cWriteBuffer(address, pins.createBufferFromArray(data.slice(i * IIC_MAX_TRANSFER_SIZE, i * IIC_MAX_TRANSFER_SIZE + currentTransferSize)), true);
+                } else {
+                    pins.i2cWriteBuffer(address, pins.createBufferFromArray(data.slice(i * IIC_MAX_TRANSFER_SIZE, i * IIC_MAX_TRANSFER_SIZE + currentTransferSize)), false);
                 }
                 remain = remain - currentTransferSize;
                 i = i + 1;
@@ -1190,7 +1407,6 @@ namespace lcdDisplay {
         } else {
 
         }
-        
     }
 
     function readACK(length: number): Buffer {
@@ -1206,6 +1422,6 @@ namespace lcdDisplay {
         } else {
             let buf: Buffer = pins.createBuffer(0);
             return buf;
-        }  
+        }
     }
 }
