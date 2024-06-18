@@ -1010,7 +1010,7 @@ namespace lcdDisplay {
 
     function deleteGif(id: number) {
         let cmd = creatCommand(CMD_DELETE_OBJ, CMD_DELETE_OBJ_LEN);
-        cmd = cmd.concat([CMD_OF_DRAW_GIF_EXTERNAL, id]);
+        cmd = cmd.concat([CMD_OF_DRAW_GIF_INTERNAL, id]);
         writeCommand(cmd, CMD_DELETE_OBJ_LEN);
         deleteNodeByID(list.gifHead, id);
     }

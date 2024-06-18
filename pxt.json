@@ -7,8 +7,6 @@
         "core": "*"
     },
     "files": [
-        "main.blocks",
-        "main.ts",
         "lcdDisplay.ts",
         "_locales/zh-cn/lcdDisplay-strings.json",
         "_locales/zh-cn/lcdDisplay-jsdoc-strings.json",
@@ -24,5 +22,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
