@@ -285,6 +285,7 @@ namespace lcdDisplay {
     let axisListY: string[] = [];
     let axisYData: number[] = [];
     let seriesData: any = {};
+    let dataFactor = 1; // "data coordinate conversion factors
 
     /**
      * ...
@@ -319,7 +320,7 @@ namespace lcdDisplay {
     //% weight=90
     //% group="Basics"
     export function lcdSetBgcolor(color: number) {
-        setBackgroundColor(color);
+        setBackgroundColor(colorToCustom(color));
     }
 
     /**
@@ -341,7 +342,7 @@ namespace lcdDisplay {
 
     /**
      * ...
-     * @param picture to picture ,eg: "wind.png"
+     * @param picture to picture ,eg: "fruit.png"
      */
 
     //% block="Setting a background picture %picture"
@@ -393,6 +394,7 @@ namespace lcdDisplay {
     //% inlineInputMode=inline
     //% weight=70
     //% group="Basics"
+    //% deprecated=true
     export function lcdDisplayTime(num: number, time: string, x: number, y: number, size: FontSize, color: number) {
         updateString(num, x, y, time, size, color);
     }
@@ -418,7 +420,7 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param name to name ,eg: "wind.png"
+     * @param name to name ,eg: "/expression icon/happy.png"
      * @param x to x ,eg: 120
      * @param y to y ,eg: 120
      * @param size to size ,eg: FontSize.Large
@@ -476,20 +478,20 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x1 to x1 ,eg: 120
+     * @param x1 to x1 ,eg: 40
      * @param y1 to y1 ,eg: 120
-     * @param x2 to x2 ,eg: 240
-     * @param y2 to y2 ,eg: 240
-     * @param width to width ,eg: 5
-     * @param color to color ,eg: 0xFF0000
+     * @param x2 to x2 ,eg: 300
+     * @param y2 to y2 ,eg: 120
+     * @param width to width ,eg: 20
+     * @param color to color ,eg: 0x007FFF
      */
 
     //% block="draw line number %num start x1: %x1 y1: %y1 end x2: %x2 y2: %y2 width %width color %color"
     //% num.min=1 num.max=255 num.defl=1
-    //% x1.min=0 x1.max=320 x1.defl=120
+    //% x1.min=0 x1.max=320 x1.defl=40
     //% y1.min=0 y1.max=240 y1.defl=120
-    //% x2.min=0 x2.max=320 x2.defl=240
-    //% y2.min=0 y2.max=240 y2.defl=240
+    //% x2.min=0 x2.max=320 x2.defl=300
+    //% y2.min=0 y2.max=240 y2.defl=120
     //% color.shadow="colorNumberPicker"
     //% inlineInputMode=inline
     //% weight=55
@@ -502,23 +504,23 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
-     * @param y to y ,eg: 120
-     * @param w to w ,eg: 240
-     * @param h to h ,eg: 240
+     * @param x to x ,eg: 0
+     * @param y to y ,eg: 0
+     * @param w to w ,eg: 300
+     * @param h to h ,eg: 200
      * @param width to width ,eg: 5
      * @param bocolor to bocolor ,eg: 0xFF0000
      * @param fill to fill ,eg: DrawType.Fill
-     * @param fcolor to fcolor ,eg: 0xFF0000
-     * @param round to round ,eg: RectangleRound.IsRound
+     * @param fcolor to fcolor ,eg: 0xFFFFFF
+     * @param round to round ,eg: lcdDisplay.RectangleRound.NoneRound
      */
 
     //% block="draw rectangle number %num start x: %x y: %y width %w height %h line width %width Border color %bocolor %fill color %fcolor round %round"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
-    //% y.min=0 y.max=240 y.defl=120
-    //% w.min=0 w.max=320 w.defl=80
-    //% h.min=0 h.max=240 h.defl=100
+    //% x.min=0 x.max=320 x.defl=0
+    //% y.min=0 y.max=240 y.defl=0
+    //% w.min=0 w.max=320 w.defl=300
+    //% h.min=0 h.max=240 h.defl=200
     //% bocolor.shadow="colorNumberPicker"
     //% fcolor.shadow="colorNumberPicker"
     //% inlineInputMode=inline
@@ -532,20 +534,20 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
+     * @param x to x ,eg: 160
      * @param y to y ,eg: 120
-     * @param r to r ,eg: 10
+     * @param r to r ,eg: 120
      * @param width to width ,eg: 5
      * @param bocolor to bocolor ,eg: 0xFF0000
      * @param fill to fill ,eg: DrawType.Fill
-     * @param fcolor to fcolor ,eg: 0xFF0000
+     * @param fcolor to fcolor ,eg: 0xFFFFFF
      */
 
     //% block="draw Circle number %num center x: %x y: %y radius %r line width %width Border color %bocolor %fill color %fcolor"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
+    //% x.min=0 x.max=320 x.defl=160
     //% y.min=0 y.max=240 y.defl=120
-    //% r.min=0 r.max=320 r.defl=10
+    //% r.min=0 r.max=120 r.defl=120
     //% bocolor.shadow="colorNumberPicker"
     //% fcolor.shadow="colorNumberPicker"
     //% inlineInputMode=inline
@@ -559,26 +561,26 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x1 to x1 ,eg: 10
-     * @param y1 to y1 ,eg: 10
-     * @param x2 to x2 ,eg: 120
-     * @param y2 to y2 ,eg: 120
-     * @param x3 to x3 ,eg: 200
-     * @param y3 to y3 ,eg: 200
+     * @param x1 to x1 ,eg: 160
+     * @param y1 to y1 ,eg: 0
+     * @param x2 to x2 ,eg: 0
+     * @param y2 to y2 ,eg: 240
+     * @param x3 to x3 ,eg: 320
+     * @param y3 to y3 ,eg: 240
      * @param width to width ,eg: 5
      * @param bocolor to bocolor ,eg: 0xFF0000
      * @param fill to fill ,eg: DrawType.Fill
-     * @param fcolor to fcolor ,eg: 0xFF0000
+     * @param fcolor to fcolor ,eg: 0xFFFFFF
      */
 
     //% block="draw triangle number %num x1: %x1 y1: %y1 x2: %x2 y2: %y2 x3: %x3 y3: %y3 line width %width Border color %bocolor %fill color %fcolor"
     //% num.min=1 num.max=255 num.defl=1
-    //% x1.min=0 x1.max=320 x1.defl=10
-    //% y1.min=0 y1.max=240 y1.defl=10
-    //% x2.min=0 x2.max=320 x2.defl=120
-    //% y2.min=0 y2.max=240 y2.defl=120
-    //% x3.min=0 x3.max=320 x3.defl=200
-    //% y3.min=0 y3.max=240 y3.defl=200
+    //% x1.min=0 x1.max=320 x1.defl=160
+    //% y1.min=0 y1.max=240 y1.defl=0
+    //% x2.min=0 x2.max=320 x2.defl=0
+    //% y2.min=0 y2.max=240 y2.defl=240
+    //% x3.min=0 x3.max=320 x3.defl=320
+    //% y3.min=0 y3.max=240 y3.defl=240
     //% bocolor.shadow="colorNumberPicker"
     //% fcolor.shadow="colorNumberPicker"
     //% inlineInputMode=inline
@@ -592,19 +594,19 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
+     * @param x to x ,eg: 80
      * @param y to y ,eg: 120
-     * @param w to w ,eg: 120
-     * @param h to h ,eg: 120
-     * @param color to color ,eg: 0xFF0000
+     * @param w to w ,eg: 200
+     * @param h to h ,eg: 20
+     * @param color to color ,eg: 0x007FFF
      */
 
     //% block="draw slider number %num position x: %x y: %y width %w height %h color %color"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
+    //% x.min=0 x.max=320 x.defl=80
     //% y.min=0 y.max=240 y.defl=120
-    //% w.min=0 w.max=320 w.defl=120
-    //% h.min=0 h.max=240 h.defl=120
+    //% w.min=0 w.max=320 w.defl=200
+    //% h.min=0 h.max=240 h.defl=20
     //% color.shadow="colorNumberPicker"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode=inline
@@ -613,24 +615,25 @@ namespace lcdDisplay {
     //% advanced=true
     export function lcdDrawSlider(num: number, x: number, y: number, w: number, h: number, color: number) {
         updateSlider(num, x, y, w, h, color);
+        setSliderValue(num, 0);
     }
 
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
+     * @param x to x ,eg: 80
      * @param y to y ,eg: 120
-     * @param w to w ,eg: 120
-     * @param h to h ,eg: 120
-     * @param color to color ,eg: 0xFF0000
+     * @param w to w ,eg: 200
+     * @param h to h ,eg: 20
+     * @param color to color ,eg: 0x007FFF
      */
 
     //% block="draw bar number %num position x: %x y: %y width %w height %h color %color"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
+    //% x.min=0 x.max=320 x.defl=80
     //% y.min=0 y.max=240 y.defl=120
-    //% w.min=0 w.max=320 w.defl=120
-    //% h.min=0 h.max=240 h.defl=120
+    //% w.min=0 w.max=320 w.defl=200
+    //% h.min=0 h.max=240 h.defl=20
     //% color.shadow="colorNumberPicker"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode=inline
@@ -644,16 +647,16 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
-     * @param y to y ,eg: 120
-     * @param r to r ,eg: 120
+     * @param x to x ,eg: 50
+     * @param y to y ,eg: 0
+     * @param r to r ,eg: 240
      */
 
     //% block="draw compass number %num position x: %x y: %y radius %r"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
-    //% y.min=0 y.max=240 y.defl=120
-    //% r.min=0 r.max=320 r.defl=120
+    //% x.min=0 x.max=320 x.defl=50
+    //% y.min=0 y.max=240 y.defl=0
+    //% r.min=0 r.max=320 r.defl=240
     //% inlineInputMode=inline
     //% weight=25
     //% group="Widget"
@@ -665,22 +668,22 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
-     * @param y to y ,eg: 120
-     * @param r to r ,eg: 120
-     * @param start to start ,eg: 120
-     * @param end to end ,eg: 240
-     * @param color to color ,eg: 0xFF0000
-     * @param dcolor to dcolor ,eg: 0xFF0000
+     * @param x to x ,eg: 50
+     * @param y to y ,eg: 0
+     * @param r to r ,eg: 240
+     * @param start to start ,eg: 0
+     * @param end to end ,eg: 360
+     * @param color to color ,eg: 0x000000
+     * @param dcolor to dcolor ,eg: 0xFFFFFF
      */
 
     //% block="draw gauge number %num position x: %x y: %y radius %r start of scale %start End of scale %end Pointer color %color Dial color %dcolor"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
-    //% y.min=0 y.max=240 y.defl=120
-    //% r.min=0 r.max=320 r.defl=120
-    //% start.min=0 start.max=360 start.defl=120
-    //% end.min=0 end.max=360 end.defl=240
+    //% x.min=0 x.max=320 x.defl=50
+    //% y.min=0 y.max=240 y.defl=0
+    //% r.min=0 r.max=320 r.defl=240
+    //% start.min=0 start.max=360 start.defl=0
+    //% end.min=0 end.max=360 end.defl=360
     //% color.shadow="colorNumberPicker"
     //% dcolor.shadow="colorNumberPicker"
     //% inlineInputMode=inline
@@ -694,22 +697,22 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param x to x ,eg: 120
-     * @param y to y ,eg: 120
-     * @param r to r ,eg: 120
-     * @param start to start ,eg: 120
-     * @param end to end ,eg: 240
-     * @param color to color ,eg: 0xFF0000
-     * @param dcolor to dcolor ,eg: 0xFF0000
+     * @param x to x ,eg: 0
+     * @param y to y ,eg: 0
+     * @param r to r ,eg: 240
+     * @param start to start ,eg: 0
+     * @param end to end ,eg: 100
+     * @param color to color ,eg: 0x000000
+     * @param dcolor to dcolor ,eg: 0xFFFFFF
      */
 
-    //% block="draw lineMeter number %num position x: %x y: %y radius %r start of scale %start End of scale %end Pointer color %color Dial color %dcolor"
+    //% block="draw lineMeter number %num position x: %x y: %y radius %r start of scale %start End of scale %end Data color %color Dial color %dcolor"
     //% num.min=1 num.max=255 num.defl=1
-    //% x.min=0 x.max=320 x.defl=120
-    //% y.min=0 y.max=240 y.defl=120
-    //% r.min=0 r.max=320 r.defl=120
-    //% start.min=0 start.max=360 start.defl=120
-    //% end.min=0 end.max=360 end.defl=240
+    //% x.min=0 x.max=320 x.defl=0
+    //% y.min=0 y.max=240 y.defl=0
+    //% r.min=0 r.max=320 r.defl=240
+    //% start.min=0 start.max=360 start.defl=0
+    //% end.min=0 end.max=360 end.defl=100
     //% color.shadow="colorNumberPicker"
     //% dcolor.shadow="colorNumberPicker"
     //% inlineInputMode=inline
@@ -727,7 +730,7 @@ namespace lcdDisplay {
      * @param data to data ,eg: 80
      */
 
-    //% block="%type=LCDWidgetCategoryOne_conv widget number %num data %data"
+    //% block="set %type=LCDWidgetCategoryOne_conv widget number %num data %data"
     //% num.min=1 num.max=255 num.defl=1
     //% weight=17
     //% group="Widget"
@@ -775,6 +778,7 @@ namespace lcdDisplay {
         axisListX = xaxis.split(" ");
         axisListY = yaxis.split(" ");
         axisListX.forEach((value, index) => { axisYData.push(0) });
+        dataFactor = Math.abs((parseInt(axisListY[0]) - parseInt(axisListY[axisListY.length-1])) / 100);
         updateChart(chartID, color, styles);
         basic.pause(100);
         setChartAxisTexts(chartID, 0, axisListX);
@@ -803,7 +807,7 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param xaxis to xaxis ,eg: "Feb"
+     * @param xaxis to xaxis ,eg: "Jan"
      * @param data to data ,eg: 80
      */
 
@@ -815,7 +819,7 @@ namespace lcdDisplay {
     export function lcdSetChartData(num: number, xaxis: string, data: number) {
         let index = axisListX.indexOf(xaxis);
         if (index !== -1) {
-            updateChartPoint(chartID, num, index, Math.round(data / 10));
+            updateChartPoint(chartID, num, index, Math.round(data / dataFactor));
             // seriesData[num][index] = Math.round(data / 10);
         }
     }
@@ -823,8 +827,8 @@ namespace lcdDisplay {
     /**
      * ...
      * @param num to num ,eg: 1
-     * @param color to color ,eg: 0xFFFFFF
-     * @param styles to styles ,eg: ChartStyles.LineChart
+     * @param color to color ,eg: 0x007FFF
+     * @param styles to styles ,eg: lcdDisplay.ChartStyles.BarChart
      */
 
     //% block="update chart number %num background color %color styles %styles"
@@ -1385,12 +1389,23 @@ namespace lcdDisplay {
         return [(data >> 16) & 0xFF, (data >> 8) & 0xFF, data & 0xFF];
     }
 
+    function colorToCustom(color: number): number {
+        switch (color) {
+            case 0x999999:
+                return 0x696969;
+            case 0x7f00ff:
+                return 0x800080;
+            default:
+                return color;
+        }
+    }
+
     function creatCommand(cmd: number, len: number): number[] {
         return [CMD_HEADER_HIGH, CMD_HEADER_LOW, len - CMDLEN_OF_HEAD_LEN, cmd];
     }
 
     function writeCommand(data: number[], len: number) {
-        serial.writeNumbers(data);
+        // serial.writeNumbers(data);
         if (protocol == Protocol.IIC) {
             let remain = len;
             let i = 0;
