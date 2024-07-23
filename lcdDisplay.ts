@@ -41,8 +41,8 @@ const enum LCDWidgetCategoryTwo {
     Gif = 13,
 }
 
-//% block="lcdDisplay"
-//% weight=100 color=#5b3fe8 icon="\uf0b2"
+//% block="ColorScreen"
+//% weight=100 color=#5b3fe8 icon="\uf022"
 //% groups="['Basics', 'Graph', "Widget"]"
 namespace lcdDisplay {
 
@@ -54,9 +54,9 @@ namespace lcdDisplay {
     }
 
     export enum RectangleRound {
-        //% block="have round"
+        //% block="RC"
         IsRound = 1,
-        //% block="None"
+        //% block="not RC"
         NoneRound = 2,
     }
 
@@ -291,7 +291,7 @@ namespace lcdDisplay {
      * ...
      */
 
-    //% block="Color serial screen I2C initialization" 
+    //% block="ColorScreen I2C initialization"
     //% weight=100
     //% group="Basics"
     export function lcdInitIIC() {
@@ -345,7 +345,7 @@ namespace lcdDisplay {
      * @param picture to picture ,eg: "fruit.png"
      */
 
-    //% block="Setting a background picture %picture"
+    //% block="set the background picture %picture"
     //% weight=80
     //% group="Basics"
     export function lcdSetBgIamge(picture: string) {
@@ -426,7 +426,7 @@ namespace lcdDisplay {
      * @param size to size ,eg: FontSize.Large
      */
 
-    //% block="display iamge number %num name %name position x: %x y: %y size %size"
+    //% block="display image number %num name %name position x: %x y: %y size %size"
     //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=120
     //% y.min=0 y.max=240 y.defl=120
@@ -445,7 +445,7 @@ namespace lcdDisplay {
      * @param angle to angle ,eg: 180
      */
 
-    //% block="rotate iamge number %num angle %angle"
+    //% block="rotate image number %num angle %angle"
     //% num.min=1 num.max=255 num.defl=1
     //% angle.min=0 angle.max=360 size.defl=180
     //% weight=60
@@ -515,7 +515,7 @@ namespace lcdDisplay {
      * @param round to round ,eg: lcdDisplay.RectangleRound.NoneRound
      */
 
-    //% block="draw rectangle number %num start x: %x y: %y width %w height %h line width %width Border color %bocolor %fill color %fcolor round %round"
+    //% block="draw rectangle number %num start x: %x y: %y width %w height %h line width %width Border color %bocolor %fill color %fcolor RC %round"
     //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=0
     //% y.min=0 y.max=240 y.defl=0
@@ -543,7 +543,7 @@ namespace lcdDisplay {
      * @param fcolor to fcolor ,eg: 0xFFFFFF
      */
 
-    //% block="draw Circle number %num center x: %x y: %y radius %r line width %width Border color %bocolor %fill color %fcolor"
+    //% block="draw circle number %num center x: %x y: %y radius %r line width %width Border color %bocolor %fill color %fcolor"
     //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=160
     //% y.min=0 y.max=240 y.defl=120
@@ -615,7 +615,6 @@ namespace lcdDisplay {
     //% advanced=true
     export function lcdDrawSlider(num: number, x: number, y: number, w: number, h: number, color: number) {
         updateSlider(num, x, y, w, h, color);
-        setSliderValue(num, 0);
     }
 
     /**
@@ -792,7 +791,7 @@ namespace lcdDisplay {
      * @param color to color ,eg: 0xFF0000
      */
 
-    //% block="adding chart data number %num color %color"
+    //% block="Set chart data number %num color %color"
     //% num.min=1 num.max=255 num.defl=1
     //% color.shadow="colorNumberPicker"
     //% weight=14
@@ -846,7 +845,7 @@ namespace lcdDisplay {
      * @param num to num ,eg: 1
      */
 
-    //% block="delete %type=LCDWidgetCategoryTwo_conv widget number %num"
+    //% block="delete %type=LCDWidgetCategoryTwo_conv number %num"
     //% num.min=1 num.max=255 num.defl=1
     //% weight=8
     //% group="Basics"
