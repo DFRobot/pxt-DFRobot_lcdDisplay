@@ -515,7 +515,7 @@ namespace lcdDisplay {
      * @param round to round ,eg: lcdDisplay.RectangleRound.NoneRound
      */
 
-    //% block="draw rectangle number %num start x: %x y: %y width %w height %h line width %width Border color %bocolor %fill color %fcolor RC %round"
+    //% block="draw rectangle number %num start x: %x y: %y width %w height %h line width %width Border color %bocolor %fill color %fcolor %round"
     //% num.min=1 num.max=255 num.defl=1
     //% x.min=0 x.max=320 x.defl=0
     //% y.min=0 y.max=240 y.defl=0
