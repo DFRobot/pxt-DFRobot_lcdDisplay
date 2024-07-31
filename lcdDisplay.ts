@@ -743,7 +743,7 @@ namespace lcdDisplay {
                 setBarValue(num, data);
                 break;
             case LCDWidgetCategoryOne.Compass:
-                setCompassScale(num, data);
+                setCompassScale(num, (data / 360) * 3600);
                 break;
             case LCDWidgetCategoryOne.Gauge:
                 setGaugeValue(num, data);
