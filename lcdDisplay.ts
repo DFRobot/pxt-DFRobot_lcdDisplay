@@ -297,6 +297,8 @@ namespace lcdDisplay {
     export function lcdInitIIC() {
         creatList();
         protocol = Protocol.IIC;
+        basic.pause(1000);
+        
     }
 
     /**
