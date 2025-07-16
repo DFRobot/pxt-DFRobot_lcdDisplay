@@ -802,7 +802,7 @@ namespace lcdDisplay {
     export function lcdAddChartData(num: number, color: number) {
         seriesData[num] = axisYData;
         updateChartSeries(chartID, num, color);
-        addChartSeriesData(chartID, num, seriesData[num], axisListY.length)
+        addChartSeriesData(chartID, num, seriesData[num], axisListX.length)
     }
 
     /**
@@ -819,8 +819,10 @@ namespace lcdDisplay {
     //% advanced=true
     export function lcdSetChartData(num: number, xaxis: string, data: number) {
         let index = axisListX.indexOf(xaxis);
+        if (data < parseInt(axisListY[axisListY.length - 1]) || data > parseInt(axisListY[0]))
+            return 
         if (index !== -1) {
-            updateChartPoint(chartID, num, index, Math.round(data / dataFactor));
+            updateChartPoint(chartID, num, index, Math.round((data - parseInt(axisListY[axisListY.length - 1])) / dataFactor));
             // seriesData[num][index] = Math.round(data / 10);
         }
     }
